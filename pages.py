@@ -2446,7 +2446,7 @@ async function loadActivity(){
 <script>
 document.addEventListener('DOMContentLoaded', async ()=>{
   await checkAuth();
-  initCharts();
+  try{initCharts();}catch(e){}
   const sh=document.getElementById('set-host');if(sh)sh.textContent=location.host;
   const sa=document.getElementById('sub-all-url');if(sa)sa.textContent=(location.protocol==='http:'?'http':'https')+'://'+(location.host||'localhost')+'/sub-all';
   fetchStats();fetchDefaultVless();loadLinks();loadSubs();
