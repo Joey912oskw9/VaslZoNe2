@@ -1862,8 +1862,6 @@ document.addEventListener('DOMContentLoaded',async()=>{
 });
 </script>
 </body></html>"""
-
-
 def get_public_page_html(uuid_key: str) -> str:
     """صفحه پابلیک ساب v3 — طراحی حرفه‌ای‌تر با ذرات و کارت‌های شیشه‌ای"""
     return f"""<!DOCTYPE html>
@@ -2259,10 +2257,10 @@ async function init(){{
   // ذرات پس‌زمینه
   const c=document.getElementById('particles-canvas'),ctx=c.getContext('2d');
   let w,h,pts=[];
-  function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight}
+  function resize(){{w=c.width=window.innerWidth;h=c.height=window.innerHeight}}
   resize();window.addEventListener('resize',resize);
-  for(let i=0;i<70;i++){pts.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5})}
-  function draw(){ctx.clearRect(0,0,w,h);pts.forEach(p=>{p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>w)p.dx*=-1;if(p.y<0||p.y>h)p.dy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(59,130,246,0.25)';ctx.fill()});requestAnimationFrame(draw)}
+  for(let i=0;i<70;i++){{pts.push({{x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5}})}}
+  function draw(){{ctx.clearRect(0,0,w,h);pts.forEach(p=>{{p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>w){{p.dx*=-1;}}if(p.y<0||p.y>h){{p.dy*=-1;}}ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(59,130,246,0.25)';ctx.fill();}});requestAnimationFrame(draw)}}
   draw();
   try{{
     const data = await loadData();
