@@ -2446,6 +2446,8 @@ async function loadActivity(){
 </script>
 
 <script>
+console.log("Script loaded");
+document.body.style.borderTop = "10px solid red";
 document.addEventListener('DOMContentLoaded', async ()=>{
   await checkAuth();
   try{initCharts();}catch(e){}
