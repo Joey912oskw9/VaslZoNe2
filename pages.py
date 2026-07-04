@@ -398,7 +398,7 @@ body{font-family:'Vazirmatn',sans-serif;background:var(--bg);color:var(--text);
 @media(max-width:1100px){.metrics{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.metrics{grid-template-columns:1fr}}
 DASHBOARD_HTML = DASHBOARD_HTML + r"""
-/* ───── هیرو ترافیک ───── */
+/ ------- هیرو ترافیک ------- */
 .traf-hero{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:14px;margin-bottom:20px}
 .traf-main-stat{
   background:linear-gradient(155deg,var(--card-2) 0%,var(--card) 60%);
