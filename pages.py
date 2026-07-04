@@ -2449,10 +2449,16 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   initCharts();
   const sh=document.getElementById('set-host');if(sh)sh.textContent=location.host;
   const sa=document.getElementById('sub-all-url');if(sa)sa.textContent=(location.protocol==='http:'?'http':'https')+'://'+(location.host||'localhost')+'/sub-all';
-  const lg=document.getElementById('g-ips');if(lg){try{const s=await authF('/api/settings/global-ips');if(lg){lg.value=s?.ips?.join(', ')||'';}const gp=document.getElementById('g-port');if(gp)gp.value=s?.port||443;}catch(e){}}
-  try{const s=await authF('/api/settings/global-ips');if(s&&s.ips){const el=document.getElementById('gips-list');if(el)el.innerHTML='📡 IPهای فعلی: '+(s.ips.join(', ')||'(پیش‌فرض) '+(location.host||''))+' · پورت: '+(s.port||443);}}catch(e){}
   fetchStats();fetchDefaultVless();loadLinks();loadSubs();
-  try{const s=await authF('/api/settings/global-ips');if(Array.isArray(s.ips)&&s.ips.length){const el=document.getElementById('gips-list');if(el)el.innerHTML='📡 IPها: '+(s.ips.join(', ')||'(پیش‌فرض) '+(location.host||''))+' · پورت: '+(s.port||443);}}catch(e){}
+  (async()=>{
+    try{
+      const r=await authF('/api/settings/global-ips');
+      const s=await r.json();
+      const g=document.getElementById('g-ips');if(g)g.value=(s.ips||[]).join(', ');
+      const p=document.getElementById('g-port');if(p)p.value=s.port||443;
+      const l=document.getElementById('gips-list');if(l)l.innerHTML='📡 IPها: '+((s.ips||[]).join(', ')||location.host)+' · پورت '+(s.port||443);
+    }catch(e){}
+  })();
   setInterval(fetchStats,4000);
   setInterval(()=>{
     if(document.getElementById('pg-links')?.classList.contains('on'))loadLinks();
