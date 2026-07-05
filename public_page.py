@@ -84,6 +84,7 @@ body{font-family:Vazirmatn,sans-serif;background:radial-gradient(ellipse 80% 35%
 </div>
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 <script>
+document.body.innerHTML = '<div style="color:red;font-size:20px">JS RAN</div>' + document.body.innerHTML;
 var A="API_URL",L=[],ch=null;
 function B(b){if(!b||b===0)return'0';if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';if(b<1073741824)return(b/1048576).toFixed(2)+' MB';return(b/1073741824).toFixed(2)+' GB'}
 function E(s){return String(s||'').replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
