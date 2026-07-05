@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+def get_single_sub_page_html(sub_id):
+    return r"""<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
     </script>
     <style>
-        /* ===== RESET & ROOT ===== */
         * {
             margin: 0;
             padding: 0;
@@ -28,8 +28,6 @@
             --border: rgba(255, 215, 0, 0.10);
             --shadow: 0 0 40px rgba(255, 215, 0, 0.03);
         }
-
-        /* ===== KEYFRAMES ===== */
         @keyframes float {
             0%,
             100% {
@@ -106,7 +104,6 @@
             }
         }
 
-        /* ===== BASE ===== */
         body {
             font-family: 'Vazirmatn', sans-serif;
             background: radial-gradient(ellipse 70% 30% at 50% -5%, rgba(255, 215, 0, 0.05), transparent), var(--bg);
@@ -125,7 +122,6 @@
             z-index: 2;
         }
 
-        /* ===== HEADER ===== */
         .hd {
             text-align: center;
             padding: 10px 0 20px;
@@ -156,7 +152,6 @@
             -webkit-text-fill-color: transparent;
             animation: glowPulse 4s ease-in-out infinite;
             letter-spacing: 1px;
-            text-shadow: none;
             position: relative;
             display: inline-block;
         }
@@ -204,7 +199,6 @@
             background: rgba(255, 215, 0, 0.12);
         }
 
-        /* ===== ROCKET ===== */
         .rocket-fixed {
             position: fixed;
             left: 12px;
@@ -228,7 +222,6 @@
             animation: none;
             opacity: 0;
         }
-        /* Explosion container */
         #explosion-container {
             position: fixed;
             pointer-events: none;
@@ -252,7 +245,6 @@
             animation: explode 0.8s ease-out forwards;
         }
 
-        /* ===== CARDS ===== */
         .cd {
             background: var(--card);
             border: 1px solid var(--border);
@@ -267,7 +259,6 @@
             border-color: rgba(255, 215, 0, 0.18);
         }
 
-        /* ===== STATS GRID ===== */
         .s3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -299,7 +290,6 @@
             color: var(--gold);
         }
 
-        /* ===== CONFIG ITEMS ===== */
         .cfg {
             background: var(--card);
             border: 1px solid var(--border);
@@ -434,7 +424,6 @@
             background: rgba(255, 215, 0, 0.06);
         }
 
-        /* ===== SPEED TEST ===== */
         .spd {
             background: var(--card);
             border: 1px solid var(--border);
@@ -485,7 +474,6 @@
             }
         }
 
-        /* ===== CHART SECTION ===== */
         .chart-section {
             background: var(--card);
             border: 1px solid var(--border);
@@ -542,30 +530,7 @@
             width: 100% !important;
             height: 100% !important;
         }
-        .chart-tooltip {
-            position: absolute;
-            background: rgba(15, 15, 11, 0.95);
-            border: 1px solid var(--gold);
-            border-radius: 8px;
-            padding: 6px 12px;
-            font-size: 10px;
-            color: var(--text);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.15s;
-            z-index: 10;
-            backdrop-filter: blur(6px);
-        }
-        .chart-tooltip.show {
-            opacity: 1;
-        }
-        .chart-tooltip .val {
-            color: var(--gold);
-            font-weight: 800;
-            font-size: 13px;
-        }
 
-        /* ===== COPY ALL ===== */
         .cp-all {
             background: linear-gradient(135deg, var(--gold), #ffc107);
             border-radius: 12px;
@@ -598,7 +563,6 @@
             transform: scale(1.03);
         }
 
-        /* ===== TOAST ===== */
         .tt {
             position: fixed;
             bottom: 24px;
@@ -621,7 +585,6 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* ===== FOOTER ===== */
         .ft {
             text-align: center;
             padding: 24px 0 10px;
@@ -634,7 +597,6 @@
             text-decoration: none;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media(max-width:500px) {
             .rocket-fixed {
                 display: none;
@@ -665,26 +627,20 @@
 </head>
 <body>
 
-    <!-- ===== TOAST ===== -->
     <div class="tt" id="tt"></div>
 
-    <!-- ===== ROCKET ===== -->
     <div class="rocket-fixed" id="rocket" onclick="fireRocket()">
         <i class="ti ti-rocket"></i>
     </div>
 
-    <!-- ===== EXPLOSION CONTAINER ===== -->
     <div id="explosion-container"></div>
 
-    <!-- ===== MUSIC ===== -->
     <audio id="bgMusic" autoplay loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">
     </audio>
 
-    <!-- ===== WRAPPER ===== -->
     <div class="wrap">
 
-        <!-- HEADER -->
         <div class="hd">
             <div class="av"><i class="ti ti-bolt"></i></div>
             <div class="cn">VaslZone</div>
@@ -694,7 +650,6 @@
             </a>
         </div>
 
-        <!-- ROOT -->
         <div id="root">
             <div style="text-align:center;padding:60px 20px;color:var(--text3)">
                 <i class="ti ti-loader-2" style="font-size:34px;color:var(--gold);display:inline-block;animation:spin 1.2s linear infinite"></i>
@@ -702,26 +657,21 @@
             </div>
         </div>
 
-        <!-- FOOTER -->
         <div class="ft">
             <a href="https://t.me/VaslZone">@VaslZone</a> · v10.0
         </div>
     </div>
 
     <script>
-        // ============================================================
-        //  CONFIG
-        // ============================================================
-        var API_URL = "API_URL";
+        // ========== CONFIG ==========
+        var API_URL = "/api/public/sub-single/SUB_ID_PLACEHOLDER";
         var ALL_LINKS = [];
         var CHART_INSTANCE = null;
         var CHART_DATA = [];
         var CHART_LABELS = [];
         var CURRENT_RANGE = '1h';
 
-        // ============================================================
-        //  HELPERS
-        // ============================================================
+        // ========== HELPERS ==========
         function formatBytes(b) {
             if (!b || b === 0) return '0';
             if (b < 1024) return b + ' B';
@@ -750,9 +700,7 @@
             t._hide = setTimeout(function() { t.classList.remove('s'); }, 2000);
         }
 
-        // ============================================================
-        //  ROCKET
-        // ============================================================
+        // ========== ROCKET ==========
         var rocketFired = false;
 
         function fireRocket() {
@@ -761,11 +709,9 @@
             var el = document.getElementById('rocket');
             el.classList.add('launching');
 
-            // Explosion after rocket reaches top
             setTimeout(function() {
                 createExplosion();
                 el.classList.add('exploded');
-                // Scroll to configs (smooth)
                 var target = document.querySelector('.cfg');
                 if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 setTimeout(function() {
@@ -780,7 +726,6 @@
             var cx = window.innerWidth / 2;
             var cy = window.innerHeight / 2;
 
-            // Rings
             for (var i = 0; i < 4; i++) {
                 var ring = document.createElement('div');
                 ring.className = 'explosion-ring';
@@ -795,7 +740,6 @@
                 setTimeout(function() { ring.remove(); }, 1200);
             }
 
-            // Particles
             var colors = ['#ffd700', '#ffec8b', '#ffc107', '#fff', '#ff8f00'];
             for (var i = 0; i < 60; i++) {
                 var p = document.createElement('div');
@@ -811,7 +755,8 @@
                 p.style.top = (cy - size / 2) + 'px';
                 p.style.setProperty('--tx', tx + 'px');
                 p.style.setProperty('--ty', ty + 'px');
-                p.style.background = 'radial-gradient(circle, #fff, ' + colors[Math.floor(Math.random() * colors.length)] + ')';
+                p.style.background = 'radial-gradient(circle, #fff, ' + colors[Math.floor(Math.random() * colors.length)] +
+                ')';
                 p.style.animationDuration = (0.6 + Math.random() * 0.6) + 's';
                 p.style.animationDelay = (Math.random() * 0.2) + 's';
                 container.appendChild(p);
@@ -819,9 +764,7 @@
             }
         }
 
-        // ============================================================
-        //  FETCH DATA
-        // ============================================================
+        // ========== FETCH ==========
         async function fetchData() {
             try {
                 var res = await fetch(API_URL);
@@ -832,9 +775,7 @@
             }
         }
 
-        // ============================================================
-        //  CHART
-        // ============================================================
+        // ========== CHART ==========
         function buildChart(data, labels) {
             var canvas = document.getElementById('usageChart');
             if (!canvas) return;
@@ -917,7 +858,7 @@
         function generateChartData(range) {
             var now = Date.now();
             var points = 30;
-            var interval = 60 * 1000; // 1 min
+            var interval = 60 * 1000;
             var labels = [];
             var data = [];
 
@@ -941,7 +882,6 @@
             for (var i = points - 1; i >= 0; i--) {
                 var t = new Date(now - i * interval);
                 labels.push(t.getHours() + ':' + String(t.getMinutes()).padStart(2, '0'));
-                // Simulate realistic data with some variation
                 var base = 0.5 + Math.random() * 3;
                 var spike = Math.random() > 0.85 ? 5 + Math.random() * 15 : 0;
                 data.push(Math.round((base + spike) * 10) / 10);
@@ -956,9 +896,7 @@
             buildChart(CHART_DATA, CHART_LABELS);
         }
 
-        // ============================================================
-        //  SPEED TEST (Ping)
-        // ============================================================
+        // ========== SPEED TEST ==========
         function runSpeedTest() {
             var btn = document.getElementById('speedBtn');
             var res = document.getElementById('speedResult');
@@ -983,9 +921,7 @@
                 });
         }
 
-        // ============================================================
-        //  RENDER PAGE
-        // ============================================================
+        // ========== RENDER PAGE ==========
         function renderPage(data) {
             if (!data || !data.links || !data.links.length) {
                 document.getElementById('root').innerHTML =
@@ -1002,15 +938,14 @@
 
             var html = '';
 
-            // ---- Header card ----
             html += '<div class="cd" style="text-align:center">';
             html += '<div style="font-size:15px;font-weight:800">' + escapeHtml(data.name || '') + '</div>';
             if (data.desc) {
-                html += '<div style="font-size:10.5px;color:var(--text2);margin-top:3px">' + escapeHtml(data.desc) + '</div>';
+                html += '<div style="font-size:10.5px;color:var(--text2);margin-top:3px">' + escapeHtml(data.desc) +
+                '</div>';
             }
             html += '</div>';
 
-            // ---- Stats ----
             html += '<div class="s3">';
             html += '<div><div class="l">وضعیت</div><div class="v">' +
                 (data.links.length === 1 ?
@@ -1018,12 +953,11 @@
                     persianDigits(activeCount) + '/' + persianDigits(data.links.length)) +
                 '</div></div>';
             html += '<div><div class="l">مصرف کل</div><div class="v" style="font-size:17px">' + formatBytes(totalUsed) +
-            '</div></div>';
+                '</div></div>';
             html += '<div><div class="l">اتصالات</div><div class="v">' + persianDigits(data.active_connections || 0) +
                 '</div></div>';
             html += '</div>';
 
-            // ---- Copy all ----
             if (data.links.length > 1) {
                 html += '<div class="cp-all">';
                 html += '<div class="t"><i class="ti ti-copy"></i> کپی همه</div>';
@@ -1031,7 +965,6 @@
                 html += '</div>';
             }
 
-            // ---- Configs ----
             for (var i = 0; i < data.links.length; i++) {
                 var l = data.links[i];
                 var pct = l.limit_bytes > 0 ? Math.min(100, (l.used_bytes / l.limit_bytes) * 100) : 0;
@@ -1062,7 +995,6 @@
                 html += '</div>';
             }
 
-            // ---- Chart ----
             html += '<div class="chart-section" id="chartSection">';
             html += '<div class="chart-header">';
             html += '<div class="title"><i class="ti ti-chart-area"></i> نمودار مصرف</div>';
@@ -1079,7 +1011,6 @@
             html += '</div>';
             html += '</div>';
 
-            // ---- Speed test ----
             html += '<div class="spd">';
             html += '<div class="tp">';
             html += '<div class="tt"><i class="ti ti-bolt"></i> پینگ</div>';
@@ -1091,16 +1022,12 @@
 
             document.getElementById('root').innerHTML = html;
 
-            // ---- Init chart ----
             renderChart('10s');
 
-            // ---- Store links for copy ----
             window._copyLinks = data.links.map(function(l) { return l.vless_link || ''; });
         }
 
-        // ============================================================
-        //  UI ACTIONS
-        // ============================================================
+        // ========== UI ACTIONS ==========
         function toggleView(i) {
             var el = document.getElementById('v-' + i);
             if (el) el.classList.toggle('s');
@@ -1112,7 +1039,6 @@
             navigator.clipboard.writeText(link).then(function() {
                 toast('کپی شد');
             }).catch(function() {
-                // Fallback
                 var ta = document.createElement('textarea');
                 ta.value = link;
                 document.body.appendChild(ta);
@@ -1156,11 +1082,8 @@
             renderChart(range);
         }
 
-        // ============================================================
-        //  INIT
-        // ============================================================
+        // ========== INIT ==========
         (async function init() {
-            // Music volume
             var audio = document.getElementById('bgMusic');
             if (audio) audio.volume = 0.04;
 
@@ -1179,3 +1102,4 @@
 
 </body>
 </html>
+""".replace("SUB_ID_PLACEHOLDER", sub_id)
