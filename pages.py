@@ -1700,7 +1700,7 @@ DASHBOARD_HTML = DASHBOARD_HTML + r"""
     <div class="card">
       <div class="card-title"><i class="ti ti-database"></i> سابسکریپشن کامل (ادمین)</div>
       <p style="font-size:11.5px;color:var(--text-3);line-height:1.8">شامل تمام کانفیگ‌های فعال.</p>
-      <div style="background:rgba(0,0,0,0.40);border:1px solid var(--border);border-radius:10px;padding:11px 13px;display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+      <div style="background:rgba(0,0,0,0.40);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:14px;display:flex;align-items:center;gap:9px;flex-wrap:wrap">
         <span style="flex:1;font-family:ui-monospace,monospace;font-size:10.5px;color:var(--yellow-3);min-width:0;word-break:break-all" id="sub-all-url">در حال دریافت...</span>
         <div style="display:flex;gap:6px;flex-shrink:0">
           <button class="btn btn-sm btn-g" onclick="cpSubAll()"><i class="ti ti-copy"></i></button>
@@ -2011,14 +2011,9 @@ async function fetchStats(){
     if(d.hourly){
       const labels=Object.keys(d.hourly).sort(),vals=labels.map(k=>+(d.hourly[k]/1048576).toFixed(2));
       [ch1,ch3].forEach(c=>{if(!c)return;c.data.labels=labels;c.data.datasets[0].data=vals;c.update()});
-      if(vals.length){
-        const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
-        const peak=Math.max(...vals);
-        // ✅ اصلاح: فقط اگه المنت وجود داشت مقداردهی کن
-        const avgEl = document.getElementById('t-avg');
-        const peakEl = document.getElementById('t-peak');
-        if (avgEl) avgEl.innerHTML = avg.toFixed(2) + '<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
-        if (peakEl) peakEl.innerHTML = peak.toFixed(2) + '<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
+      if(vals.length){const avg=vals.reduce((a,b)=>a+b,0)/vals.length,peak=Math.max(...vals);
+        document.getElementById('t-avg').innerHTML=avg.toFixed(2)+'<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
+        document.getElementById('t-peak').innerHTML=peak.toFixed(2)+'<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
       }
     }
     renderErrs(d.recent_errors||[]);
@@ -2042,8 +2037,8 @@ async function loadLinks(){
     nlSub.innerHTML='<option value="">— بدون گروه —</option>'+subs.map(s=>'<option value="'+esc(s.sub_id)+'">'+esc(s.name)+'</option>').join('');
     if(curSub)nlSub.value=curSub;
     document.getElementById('links-nb').textContent=links.length;
-    document.getElementById('links-pg-cnt').textContent=toFa(links.length)+'
-    // document.getElementById('connections').innerHTML='<div style="background:linear-gradient(145deg,var(--card-2),var(--card));border:1px solid var(--border);border-radius:14px;padding:24px 32px;position:relative;overflow:hidden;margin-bottom:18px;box-shadow:var(--shadow)"><div style="position:absolute;top:-50px;left:-50px;width:200px;height:200px;background:radial-gradient(circle,var(--red-dim),transparent 70%);pointer-events:none"></div><div style="position:relative;z-index:1;font-size:11px;color:var(--red-3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="ti ti-link"></i> لینک پیش‌فرض (بدون محدودیت)</div><div style="position:relative;z-index:1;font-size:34px;font-weight:900;color:var(--text);line-height:1;letter-spacing:-.03em">'+toFa(links.filter(l=>l.limit_bytes===0&&l.active&&!l.expired).length)+'<span style="font-size:14px;font-weight:500;color:var(--text-3)"> بدون محدودیت</span></div></div>';
+    document.getElementById('links-pg-cnt').textContent=toFa(links.length)+' کانفیگ';
+    document.getElementById('connections').innerHTML='<div style="background:linear-gradient(145deg,var(--card-2),var(--card));border:1px solid var(--border);border-radius:14px;padding:24px 32px;position:relative;overflow:hidden;margin-bottom:18px;box-shadow:var(--shadow)"><div style="position:absolute;top:-50px;left:-50px;width:200px;height:200px;background:radial-gradient(circle,var(--red-dim),transparent 70%);pointer-events:none"></div><div style="position:relative;z-index:1;font-size:11px;color:var(--red-3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="ti ti-link"></i> لینک پیش‌فرض (بدون محدودیت)</div><div style="position:relative;z-index:1;font-size:34px;font-weight:900;color:var(--text);line-height:1;letter-spacing:-.03em">'+toFa(links.filter(l=>l.limit_bytes===0&&l.active&&!l.expired).length)+'<span style="font-size:14px;font-weight:500;color:var(--text-3)"> بدون محدودیت</span></div></div>';
     const grid=document.getElementById('links-grid'),empty=document.getElementById('links-empty');
     if(!links.length){grid.innerHTML='';empty.style.display='block';
       document.getElementById('lsummary').innerHTML='<div class="empty"><i class="ti ti-link-off"></i><p>کانفیگی وجود ندارد</p></div>';return}
@@ -2453,28 +2448,29 @@ async function loadActivity(){
 <script>
 console.log("Script loaded");
 document.body.style.borderTop = "10px solid red";
-document.addEventListener('DOMContentLoaded', async ()=>{
-  await checkAuth();
-  try{initCharts();}catch(e){}
-  const sh=document.getElementById('set-host');if(sh)sh.textContent=location.host;
-  const sa=document.getElementById('sub-all-url');if(sa)sa.textContent=(location.protocol==='http:'?'http':'https')+'://'+(location.host||'localhost')+'/sub-all';
-  fetchStats();fetchDefaultVless();loadLinks();loadSubs();
-  (async()=>{
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(function(){
+    try{checkAuth();}catch(e){}
+    try{initCharts();}catch(e){}
+    try{fetchStats();}catch(e){}
+    try{fetchDefaultVless();}catch(e){}
+    try{loadLinks();}catch(e){}
+    try{loadSubs();}catch(e){}
+    var sh=document.getElementById('set-host');if(sh)sh.textContent=location.host;
+    var sa=document.getElementById('sub-all-url');if(sa)sa.textContent=location.protocol+'//'+location.host+'/sub-all';
+  },200);
+  setInterval(function(){try{fetchStats();}catch(e){}},4000);
+  setInterval(function(){
     try{
-      const r=await authF('/api/settings/global-ips');
-      const s=await r.json();
-      const g=document.getElementById('g-ips');if(g)g.value=(s.ips||[]).join(', ');
-      const p=document.getElementById('g-port');if(p)p.value=s.port||443;
-      const l=document.getElementById('gips-list');if(l)l.innerHTML='📡 IPها: '+((s.ips||[]).join(', ')||location.host)+' · پورت '+(s.port||443);
+      var p=document.querySelector('.pg.on');
+      if(p){
+        var id=p.id;
+        if(id==='pg-links')loadLinks();
+        if(id==='pg-subgroups')loadSubs();
+        if(id==='pg-connections')loadConns();
+        if(id==='pg-logs')loadActivity();
+      }
     }catch(e){}
-  })();
-  setInterval(fetchStats,4000);
-  setInterval(()=>{
-    if(document.getElementById('pg-links')?.classList.contains('on'))loadLinks();
-    if(document.getElementById('pg-subgroups')?.classList.contains('on'))loadSubs();
-    if(document.getElementById('pg-subscriptions')?.classList.contains('on'))loadSubsPage();
-    if(document.getElementById('pg-connections')?.classList.contains('on'))loadConns();
-    if(document.getElementById('pg-logs')?.classList.contains('on'))loadActivity();
   },5000);
 });
 
