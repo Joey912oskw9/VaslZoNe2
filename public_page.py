@@ -183,8 +183,7 @@ function render(d){{
   h+="<div class='stats-row'><div class='stat-box'><div class='sl'>وضعیت</div><div class='sv' style='font-size:"+(d.links.length===1?"16":"20")+"px'>"+(d.links.length===1?(d.links[0].active?"فعال":"غیرفعال"):active+" / "+d.links.length)+"</div><div class='ss'></div></div><div class='stat-box'><div class='sl'>مصرف کل</div><div class='sv' style='font-size:17px'>"+fmtB(totalUsed)+"</div><div class='ss'>از مجموع</div></div><div class='stat-box'><div class='sl'>اتصالات زنده</div><div class='sv'>"+(d.active_connections||0)+"</div><div class='ss'><span class='dot g'></span> آنلاین</div></div></div>";
   if(d.links.length>1)h+="<div class='copy-all-bar'><div class='copy-all-text'><div class='copy-all-title'><i class='ti ti-copy'></i> کپی همه</div><div class='copy-all-sub'>یکبار کلیک</div></div><button class='copy-all-btn' onclick='copyAll()'><i class='ti ti-clipboard-copy'></i> کپی ("+active+")</button></div>";
   h+="<div class='section-title'><i class='ti ti-link'></i> کانفیگ‌ها</div><div class='cfg-list'>";
-  for(let i=0;i<d.links.length;i++){{
-    h+="<div class='chart-box'><div class='chart-h'><i class='ti ti-chart-bar'></i> مصرف</div><div class='chart-body'><canvas id='ch'></canvas></div></div>";
+  for(let i=0;i<d.links.length;i++){{ h+="<div class='chart-box'><div class='chart-h'><i class='ti ti-chart-bar'></i> مصرف</div><div class='chart-body'><canvas id='ch'></canvas></div></div>";
     const l=d.links[i];const pct=l.limit_bytes>0?Math.min(100,(l.used_bytes/l.limit_bytes)*100):0;
     const bc=pct>90?"var(--red)":pct>70?"var(--accent)":"var(--green)";
     const remain=l.limit_bytes>0?Math.max(0,l.limit_bytes-l.used_bytes):-1;
