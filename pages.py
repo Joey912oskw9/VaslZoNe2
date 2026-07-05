@@ -2647,4 +2647,3 @@ function wsSend(){
 function wsDisc(){if(ws){ws.close();ws=null;}}
 </script>
 </body></html>"""
-[file content end]
