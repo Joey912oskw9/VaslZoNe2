@@ -2011,14 +2011,15 @@ async function fetchStats(){
     if(d.hourly){
       const labels=Object.keys(d.hourly).sort(),vals=labels.map(k=>+(d.hourly[k]/1048576).toFixed(2));
       [ch1,ch3].forEach(c=>{if(!c)return;c.data.labels=labels;c.data.datasets[0].data=vals;c.update()});
-if(vals.length){
-  const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
-  const peak=Math.max(...vals);
-  const avgEl = document.getElementById('t-avg');
-  if (avgEl) avgEl.innerHTML = avg.toFixed(2) + '<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
-  const peakEl = document.getElementById('t-peak');
-  if (peakEl) peakEl.innerHTML = peak.toFixed(2) + '<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
-}
+      if(vals.length){
+        const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+        const peak=Math.max(...vals);
+        // ✅ اصلاح: فقط اگه المنت وجود داشت مقداردهی کن
+        const avgEl = document.getElementById('t-avg');
+        const peakEl = document.getElementById('t-peak');
+        if (avgEl) avgEl.innerHTML = avg.toFixed(2) + '<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
+        if (peakEl) peakEl.innerHTML = peak.toFixed(2) + '<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
+      }
     }
     renderErrs(d.recent_errors||[]);
   }catch(e){console.error(e)}
@@ -2041,8 +2042,7 @@ async function loadLinks(){
     nlSub.innerHTML='<option value="">— بدون گروه —</option>'+subs.map(s=>'<option value="'+esc(s.sub_id)+'">'+esc(s.name)+'</option>').join('');
     if(curSub)nlSub.value=curSub;
     document.getElementById('links-nb').textContent=links.length;
-    document.getElementById('links-pg-cnt').textContent=toFa(links.length)+' کانفیگ';
-    // اصلاح: کامنت کردن خط مربوط به connections
+    document.getElementById('links-pg-cnt').textContent=toFa(links.length)+'
     // document.getElementById('connections').innerHTML='<div style="background:linear-gradient(145deg,var(--card-2),var(--card));border:1px solid var(--border);border-radius:14px;padding:24px 32px;position:relative;overflow:hidden;margin-bottom:18px;box-shadow:var(--shadow)"><div style="position:absolute;top:-50px;left:-50px;width:200px;height:200px;background:radial-gradient(circle,var(--red-dim),transparent 70%);pointer-events:none"></div><div style="position:relative;z-index:1;font-size:11px;color:var(--red-3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="ti ti-link"></i> لینک پیش‌فرض (بدون محدودیت)</div><div style="position:relative;z-index:1;font-size:34px;font-weight:900;color:var(--text);line-height:1;letter-spacing:-.03em">'+toFa(links.filter(l=>l.limit_bytes===0&&l.active&&!l.expired).length)+'<span style="font-size:14px;font-weight:500;color:var(--text-3)"> بدون محدودیت</span></div></div>';
     const grid=document.getElementById('links-grid'),empty=document.getElementById('links-empty');
     if(!links.length){grid.innerHTML='';empty.style.display='block';
