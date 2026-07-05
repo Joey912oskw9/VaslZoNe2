@@ -11,8 +11,8 @@ def get_sub_page_html(api_url: str, title: str, subtitle: str = "") -> str:
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
-@keyframes rLaunch{0%{transform:translateY(0) rotate(0)}20%{transform:translateY(-30px) rotate(-10deg)}50%{transform:translateY(-60px) rotate(10deg) scale(1.1)}100%{transform:translateY(calc(100vh - 100px)) rotate(5deg) scale(0.3);opacity:0}}
-@keyframes rExplode{0%{transform:scale(0);opacity:1}30%{transform:scale(3);opacity:.8}100%{transform:scale(5);opacity:0}}
+@keyframes rLaunch{{0%{{transform:translateY(0) rotate(0)}}20%{{transform:translateY(-30px) rotate(-10deg)}}50%{{transform:translateY(-60px) rotate(10deg) scale(1.1)}}100%{{transform:translateY(calc(100vh - 100px)) rotate(5deg) scale(0.3);opacity:0}}}}
+@keyframes rExplode{{0%{{transform:scale(0);opacity:1}}30%{{transform:scale(3);opacity:.8}}100%{{transform:scale(5);opacity:0}}}}
 .chart-box{{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-top:14px}}
 .chart-h{{font-size:11px;font-weight:800;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px;text-transform:uppercase}}
 .chart-h i{{color:var(--accent)}}
