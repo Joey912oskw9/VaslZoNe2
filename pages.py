@@ -2011,10 +2011,14 @@ async function fetchStats(){
     if(d.hourly){
       const labels=Object.keys(d.hourly).sort(),vals=labels.map(k=>+(d.hourly[k]/1048576).toFixed(2));
       [ch1,ch3].forEach(c=>{if(!c)return;c.data.labels=labels;c.data.datasets[0].data=vals;c.update()});
-      if(vals.length){const avg=vals.reduce((a,b)=>a+b,0)/vals.length,peak=Math.max(...vals);
-        document.getElementById('t-avg').innerHTML=avg.toFixed(2)+'<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
-        document.getElementById('t-peak').innerHTML=peak.toFixed(2)+'<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
-      }
+if(vals.length){
+  const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+  const peak=Math.max(...vals);
+  const avgEl = document.getElementById('t-avg');
+  if (avgEl) avgEl.innerHTML = avg.toFixed(2) + '<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
+  const peakEl = document.getElementById('t-peak');
+  if (peakEl) peakEl.innerHTML = peak.toFixed(2) + '<span style="font-size:9px;color:var(--text-3);margin-right:3px">MB</span>';
+}
     }
     renderErrs(d.recent_errors||[]);
   }catch(e){console.error(e)}
