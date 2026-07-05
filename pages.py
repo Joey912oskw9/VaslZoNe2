@@ -2448,6 +2448,9 @@ async function loadActivity(){
 <script>
 console.log("Script loaded");
 document.body.style.borderTop = "10px solid red";
+console.log("JS_STARTED");
+window.testOK = true;
+alert("اگر این پیام رو دیدی اسکریپت اجرا شده");
 document.addEventListener('DOMContentLoaded', async ()=>{
   await checkAuth();
   try{initCharts();}catch(e){}
