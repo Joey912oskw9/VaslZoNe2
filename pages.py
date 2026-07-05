@@ -2027,7 +2027,7 @@ function renderErrs(errs){
 
 let allSubsList=[],allLinksList=[];
 async function loadLinks(){
-  try{
+  try {
     const [lr,sr]=await Promise.all([authF('/api/links'),authF('/api/subs')]);
     const {links=[]}=await lr.json();
     const {subs=[]}=await sr.json();
