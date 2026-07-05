@@ -19,19 +19,17 @@ def get_single_sub_page_html(sub_id):
             --bg: #070704;
             --card: #0f0f0b;
             --gold: #ffd700;
-            --gold2: #f5c518;
             --text: #f5f5dc;
             --text2: #bdb76b;
             --text3: #5a5a35;
             --green: #66bb6a;
             --red: #ef5350;
             --border: rgba(255, 215, 0, 0.10);
-            --shadow: 0 0 40px rgba(255, 215, 0, 0.03);
         }
         @keyframes float {
             0%,
             100% {
-                transform: translateY(0px);
+                transform: translateY(0);
             }
             50% {
                 transform: translateY(-10px);
@@ -122,6 +120,7 @@ def get_single_sub_page_html(sub_id):
             z-index: 2;
         }
 
+        /* ===== HEADER ===== */
         .hd {
             text-align: center;
             padding: 10px 0 20px;
@@ -140,8 +139,6 @@ def get_single_sub_page_html(sub_id):
             color: #000;
             animation: float 5s ease-in-out infinite;
             box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.08), 0 0 40px rgba(255, 215, 0, 0.05);
-            position: relative;
-            z-index: 1;
         }
         .hd .cn {
             font-size: 42px;
@@ -152,24 +149,7 @@ def get_single_sub_page_html(sub_id):
             -webkit-text-fill-color: transparent;
             animation: glowPulse 4s ease-in-out infinite;
             letter-spacing: 1px;
-            position: relative;
             display: inline-block;
-        }
-        .hd .cn::after {
-            content: 'VaslZone';
-            position: absolute;
-            top: 0;
-            right: 0;
-            left: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, var(--gold), #ffe44d, var(--gold));
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: blur(20px);
-            opacity: 0.3;
-            z-index: -1;
-            animation: glowPulse 4s ease-in-out infinite;
         }
         .hd .sub-en {
             font-size: 14px;
@@ -199,6 +179,7 @@ def get_single_sub_page_html(sub_id):
             background: rgba(255, 215, 0, 0.12);
         }
 
+        /* ===== ROCKET ===== */
         .rocket-fixed {
             position: fixed;
             left: 12px;
@@ -210,7 +191,6 @@ def get_single_sub_page_html(sub_id):
             cursor: pointer;
             animation: float 3s ease-in-out infinite;
             filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.2));
-            transition: 0.1s;
             user-select: none;
             touch-action: manipulation;
         }
@@ -245,6 +225,7 @@ def get_single_sub_page_html(sub_id):
             animation: explode 0.8s ease-out forwards;
         }
 
+        /* ===== CARDS ===== */
         .cd {
             background: var(--card);
             border: 1px solid var(--border);
@@ -253,12 +234,12 @@ def get_single_sub_page_html(sub_id):
             margin-bottom: 12px;
             animation: fade 0.4s;
             transition: 0.2s;
-            box-shadow: var(--shadow);
         }
         .cd:hover {
             border-color: rgba(255, 215, 0, 0.18);
         }
 
+        /* ===== STATS ===== */
         .s3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -290,6 +271,7 @@ def get_single_sub_page_html(sub_id):
             color: var(--gold);
         }
 
+        /* ===== CONFIG ITEMS ===== */
         .cfg {
             background: var(--card);
             border: 1px solid var(--border);
@@ -424,6 +406,7 @@ def get_single_sub_page_html(sub_id):
             background: rgba(255, 215, 0, 0.06);
         }
 
+        /* ===== SPEED TEST (PING) ===== */
         .spd {
             background: var(--card);
             border: 1px solid var(--border);
@@ -474,6 +457,7 @@ def get_single_sub_page_html(sub_id):
             }
         }
 
+        /* ===== CHART ===== */
         .chart-section {
             background: var(--card);
             border: 1px solid var(--border);
@@ -531,6 +515,7 @@ def get_single_sub_page_html(sub_id):
             height: 100% !important;
         }
 
+        /* ===== COPY ALL ===== */
         .cp-all {
             background: linear-gradient(135deg, var(--gold), #ffc107);
             border-radius: 12px;
@@ -563,6 +548,7 @@ def get_single_sub_page_html(sub_id):
             transform: scale(1.03);
         }
 
+        /* ===== TOAST ===== */
         .tt {
             position: fixed;
             bottom: 24px;
@@ -585,6 +571,7 @@ def get_single_sub_page_html(sub_id):
             transform: translateX(-50%) translateY(0);
         }
 
+        /* ===== FOOTER ===== */
         .ft {
             text-align: center;
             padding: 24px 0 10px;
@@ -597,6 +584,7 @@ def get_single_sub_page_html(sub_id):
             text-decoration: none;
         }
 
+        /* ===== RESPONSIVE ===== */
         @media(max-width:500px) {
             .rocket-fixed {
                 display: none;
@@ -627,20 +615,26 @@ def get_single_sub_page_html(sub_id):
 </head>
 <body>
 
+    <!-- ===== TOAST ===== -->
     <div class="tt" id="tt"></div>
 
+    <!-- ===== ROCKET ===== -->
     <div class="rocket-fixed" id="rocket" onclick="fireRocket()">
         <i class="ti ti-rocket"></i>
     </div>
 
+    <!-- ===== EXPLOSION CONTAINER ===== -->
     <div id="explosion-container"></div>
 
-    <audio id="bgMusic" autoplay loop>
+    <!-- ===== MUSIC (صدای کم) ===== -->
+    <audio id="bgMusic" autoplay loop volume="0.04">
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3">
     </audio>
 
+    <!-- ===== WRAPPER ===== -->
     <div class="wrap">
 
+        <!-- HEADER: فقط یک اسم کانال (VaslZone) -->
         <div class="hd">
             <div class="av"><i class="ti ti-bolt"></i></div>
             <div class="cn">VaslZone</div>
@@ -650,6 +644,7 @@ def get_single_sub_page_html(sub_id):
             </a>
         </div>
 
+        <!-- ROOT (محتوای داینامیک) -->
         <div id="root">
             <div style="text-align:center;padding:60px 20px;color:var(--text3)">
                 <i class="ti ti-loader-2" style="font-size:34px;color:var(--gold);display:inline-block;animation:spin 1.2s linear infinite"></i>
@@ -657,21 +652,23 @@ def get_single_sub_page_html(sub_id):
             </div>
         </div>
 
+        <!-- FOOTER -->
         <div class="ft">
             <a href="https://t.me/VaslZone">@VaslZone</a> · v10.0
         </div>
     </div>
 
     <script>
-        // ========== CONFIG ==========
+        // ============================================================
+        //  CONFIG
+        // ============================================================
         var API_URL = "/api/public/sub-single/SUB_ID_PLACEHOLDER";
         var ALL_LINKS = [];
         var CHART_INSTANCE = null;
-        var CHART_DATA = [];
-        var CHART_LABELS = [];
-        var CURRENT_RANGE = '1h';
 
-        // ========== HELPERS ==========
+        // ============================================================
+        //  HELPERS
+        // ============================================================
         function formatBytes(b) {
             if (!b || b === 0) return '0';
             if (b < 1024) return b + ' B';
@@ -700,7 +697,9 @@ def get_single_sub_page_html(sub_id):
             t._hide = setTimeout(function() { t.classList.remove('s'); }, 2000);
         }
 
-        // ========== ROCKET ==========
+        // ============================================================
+        //  ROCKET
+        // ============================================================
         var rocketFired = false;
 
         function fireRocket() {
@@ -756,7 +755,7 @@ def get_single_sub_page_html(sub_id):
                 p.style.setProperty('--tx', tx + 'px');
                 p.style.setProperty('--ty', ty + 'px');
                 p.style.background = 'radial-gradient(circle, #fff, ' + colors[Math.floor(Math.random() * colors.length)] +
-                ')';
+                    ')';
                 p.style.animationDuration = (0.6 + Math.random() * 0.6) + 's';
                 p.style.animationDelay = (Math.random() * 0.2) + 's';
                 container.appendChild(p);
@@ -764,7 +763,9 @@ def get_single_sub_page_html(sub_id):
             }
         }
 
-        // ========== FETCH ==========
+        // ============================================================
+        //  FETCH DATA
+        // ============================================================
         async function fetchData() {
             try {
                 var res = await fetch(API_URL);
@@ -775,7 +776,9 @@ def get_single_sub_page_html(sub_id):
             }
         }
 
-        // ========== CHART ==========
+        // ============================================================
+        //  CHART
+        // ============================================================
         function buildChart(data, labels) {
             var canvas = document.getElementById('usageChart');
             if (!canvas) return;
@@ -891,12 +894,12 @@ def get_single_sub_page_html(sub_id):
 
         function renderChart(range) {
             var gen = generateChartData(range);
-            CHART_DATA = gen.data;
-            CHART_LABELS = gen.labels;
-            buildChart(CHART_DATA, CHART_LABELS);
+            buildChart(gen.data, gen.labels);
         }
 
-        // ========== SPEED TEST ==========
+        // ============================================================
+        //  SPEED TEST (PING)
+        // ============================================================
         function runSpeedTest() {
             var btn = document.getElementById('speedBtn');
             var res = document.getElementById('speedResult');
@@ -921,7 +924,9 @@ def get_single_sub_page_html(sub_id):
                 });
         }
 
-        // ========== RENDER PAGE ==========
+        // ============================================================
+        //  RENDER PAGE
+        // ============================================================
         function renderPage(data) {
             if (!data || !data.links || !data.links.length) {
                 document.getElementById('root').innerHTML =
@@ -938,6 +943,7 @@ def get_single_sub_page_html(sub_id):
 
             var html = '';
 
+            // ---- Header card ----
             html += '<div class="cd" style="text-align:center">';
             html += '<div style="font-size:15px;font-weight:800">' + escapeHtml(data.name || '') + '</div>';
             if (data.desc) {
@@ -946,6 +952,7 @@ def get_single_sub_page_html(sub_id):
             }
             html += '</div>';
 
+            // ---- Stats ----
             html += '<div class="s3">';
             html += '<div><div class="l">وضعیت</div><div class="v">' +
                 (data.links.length === 1 ?
@@ -958,6 +965,7 @@ def get_single_sub_page_html(sub_id):
                 '</div></div>';
             html += '</div>';
 
+            // ---- Copy all ----
             if (data.links.length > 1) {
                 html += '<div class="cp-all">';
                 html += '<div class="t"><i class="ti ti-copy"></i> کپی همه</div>';
@@ -965,6 +973,7 @@ def get_single_sub_page_html(sub_id):
                 html += '</div>';
             }
 
+            // ---- Configs ----
             for (var i = 0; i < data.links.length; i++) {
                 var l = data.links[i];
                 var pct = l.limit_bytes > 0 ? Math.min(100, (l.used_bytes / l.limit_bytes) * 100) : 0;
@@ -995,6 +1004,7 @@ def get_single_sub_page_html(sub_id):
                 html += '</div>';
             }
 
+            // ---- Chart ----
             html += '<div class="chart-section" id="chartSection">';
             html += '<div class="chart-header">';
             html += '<div class="title"><i class="ti ti-chart-area"></i> نمودار مصرف</div>';
@@ -1011,6 +1021,7 @@ def get_single_sub_page_html(sub_id):
             html += '</div>';
             html += '</div>';
 
+            // ---- Speed test (Ping) ----
             html += '<div class="spd">';
             html += '<div class="tp">';
             html += '<div class="tt"><i class="ti ti-bolt"></i> پینگ</div>';
@@ -1022,12 +1033,16 @@ def get_single_sub_page_html(sub_id):
 
             document.getElementById('root').innerHTML = html;
 
+            // Init chart
             renderChart('10s');
 
+            // Store links for copy
             window._copyLinks = data.links.map(function(l) { return l.vless_link || ''; });
         }
 
-        // ========== UI ACTIONS ==========
+        // ============================================================
+        //  UI ACTIONS
+        // ============================================================
         function toggleView(i) {
             var el = document.getElementById('v-' + i);
             if (el) el.classList.toggle('s');
@@ -1074,7 +1089,6 @@ def get_single_sub_page_html(sub_id):
         }
 
         function changeRange(range, btn) {
-            CURRENT_RANGE = range;
             var parent = btn.parentElement;
             var btns = parent.querySelectorAll('button');
             btns.forEach(function(b) { b.classList.remove('active'); });
@@ -1082,8 +1096,11 @@ def get_single_sub_page_html(sub_id):
             renderChart(range);
         }
 
-        // ========== INIT ==========
+        // ============================================================
+        //  INIT
+        // ============================================================
         (async function init() {
+            // تنظیم صدای آهنگ (خیلی کم)
             var audio = document.getElementById('bgMusic');
             if (audio) audio.volume = 0.04;
 
