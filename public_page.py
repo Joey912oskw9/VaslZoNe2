@@ -12,6 +12,8 @@ def get_sub_page_html(api_url, title="VaslZone", subtitle=""):
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#050504;--card:#0d0d0a;--card2:#141410;--accent:#FFD700;--accent2:#FFC107;--text:#F5F5DC;--text2:#C8C8A0;--text3:#6B6B40;--green:#66BB6A;--red:#EF5350;--border:rgba(255,215,0,0.08)}
 @keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes rL{0%{transform:translateY(0) rotate(0)}25%{transform:translateY(-30px) rotate(-8deg)}60%{transform:translateY(-60px) rotate(10deg) scale(1.1)}100%{transform:translateY(calc(100vh - 100px)) rotate(5deg) scale(0.3);opacity:0}}
+@keyframes rE{0%{transform:scale(0);opacity:1}30%{transform:scale(3);opacity:.8}100%{transform:scale(5);opacity:0}}
 body{font-family:Vazirmatn,sans-serif;background:radial-gradient(ellipse 80% 35% at 50% -5%,rgba(255,215,0,0.04),transparent),var(--bg);color:var(--text);direction:rtl;min-height:100vh;padding-bottom:40px}
 .wrap{max-width:560px;margin:0 auto;padding:16px 14px}
 .hd{text-align:center;padding:24px 0 10px}
@@ -42,11 +44,7 @@ body{font-family:Vazirmatn,sans-serif;background:radial-gradient(ellipse 80% 35%
 .btns button{font:inherit;font-size:9.5px;font-weight:700;padding:6px 12px;border-radius:7px;cursor:pointer;border:none;flex:1;transition:.15s}
 .btns .y{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#000}
 .btns .o{background:transparent;border:1px solid var(--border);color:var(--text2)}
-.spd{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:6px}
-.spd .tp{display:flex;justify-content:space-between;margin-bottom:6px}
-.spd .tt{font-size:10px;font-weight:700;color:var(--text2);display:flex;align-items:center;gap:5px}
-.spd .tt i{color:var(--accent)}
-.spd .res{font-family:monospace;font-size:13px;font-weight:800;color:var(--accent);padding:8px;background:rgba(0,0,0,0.3);border-radius:7px;text-align:center;direction:ltr}
+.spd{text-align:center;padding:10px;margin:10px 0;background:var(--card);border:1px solid var(--border);border-radius:12px}
 .ft{text-align:center;padding:20px 0;font-size:9px;color:var(--text3)}
 .ft a{color:var(--accent);font-weight:700;text-decoration:none}
 .tt{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(50px);background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:7px 16px;font-size:10px;opacity:0;transition:.25s;z-index:999}
@@ -54,8 +52,9 @@ body{font-family:Vazirmatn,sans-serif;background:radial-gradient(ellipse 80% 35%
 @media(max-width:500px){.s3{grid-template-columns:1fr 1fr}}
 </style></head>
 <body>
-<audio id="m" autoplay loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3"></audio>
-<script>document.getElementById('m').volume=0.07;</script>
+<audio id="bgm" autoplay loop><source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3"></audio>
+<script>var _b=document.getElementById('bgm');_b.volume=0.08;document.addEventListener('click',function(){try{_b.play()}catch(e){}},{once:true});</script>
+<div style="position:fixed;left:6px;top:50%;z-index:50;font-size:34px;color:var(--accent);cursor:pointer;animation:fl 3.5s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(255,215,0,0.3))" id="rk" onclick="(function(){var r=document.getElementById('rk');if(r.dataset.f)return;r.dataset.f='1';r.style.animation='rL 1.3s ease-in forwards';setTimeout(function(){r.style.display='none';var e=document.createElement('div');e.style.cssText='position:fixed;top:'+(window.innerHeight/2-40)+'px;left:0;width:80px;height:80px;pointer-events:none;z-index:60;animation:rE .7s ease-out forwards;border-radius:50%;background:radial-gradient(circle,#ffd700,transparent 70%)';document.body.appendChild(e);setTimeout(function(){e.remove();r.style.display='';r.style.animation='';r.dataset.f=''},700)},1300)})()">🚀</div>
 <div class="tt" id="tt"></div>
 <div class="wrap">
 <div class="hd"><div class="av"><i class="ti ti-bolt"></i></div><div class="cn">VaslZone</div><a style="color:var(--accent);font-size:10px;font-weight:600;text-decoration:none;margin-top:6px;display:inline-block" href="https://t.me/VaslZone" target="_blank">@VaslZone</a></div>
@@ -74,14 +73,14 @@ function Q(u){if(u)window.open('https://api.qrserver.com/v1/create-qr-code/?size
 function SV(i){var e=document.getElementById('v-'+i);if(e)e.classList.toggle('s')}
 function CP(t){navigator.clipboard.writeText(t).then(function(){T('کپی شد')})}
 function CA(){var t=L.map(function(l){return l.vless_link||''}).filter(Boolean).join('\n');if(t)navigator.clipboard.writeText(t).then(function(){T('همه کپی شد')})}
-function TS(){var b=document.getElementById('sB'),r=document.getElementById('sR');if(b.disabled)return;b.disabled=true;r.textContent='⏳...';var s=Date.now();fetch(A+'?_='+s).then(function(re){re.json().then(function(){r.textContent=(Date.now()-s<50?'🟢':Date.now()-s<150?'🟡':'🔴')+' '+(Date.now()-s)+'ms';b.disabled=false})}).catch(function(){r.textContent='🔴 خطا';b.disabled=false})}
+function RV(){var b=document.getElementById('vpnB'),r=document.getElementById('vpnR');if(b.dataset.t)return;b.dataset.t='1';r.textContent='⏳...';var s=Date.now();fetch(A+'?_='+s).then(function(re){re.json().then(function(){var ms=Date.now()-s;r.textContent=(ms<80?'🟢':ms<200?'🟡':'🔴')+' '+(ms<80?'سریع':ms<200?'متوسط':'ضعیف')+' | '+ms+'ms';b.dataset.t=''})}).catch(function(){r.textContent='🔴 قطع';b.dataset.t=''})}
 function R(d){
 if(!d||!d.links||!d.links.length){document.getElementById('root').innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--text3)"><i class="ti ti-link-off" style="font-size:36px;display:block;margin-bottom:12px;opacity:.3"></i><p>کانفیگی نیست</p></div>';return}
 L=d.links;var a=d.links.filter(function(l){return l.active}).length,u=d.links.reduce(function(s,l){return s+(l.used_bytes||0)},0);
 var h='<div class="cd" style="text-align:center"><div style="font-size:15px;font-weight:800">'+E(d.name||'')+'</div>'+(d.desc?'<div style="font-size:10px;color:var(--text2);margin-top:2px">'+E(d.desc)+'</div>':'')+'</div>';
 h+='<div class="s3"><div><div class="l">وضعیت</div><div class="v">'+(d.links.length===1?(d.links[0].active?'فعال':'غیرفعال'):N(a)+'/'+N(d.links.length))+'</div></div><div><div class="l">مصرف</div><div class="v" style="font-size:16px">'+B(u)+'</div></div><div><div class="l">اتصالات</div><div class="v">'+N(d.active_connections||0)+'</div></div></div>';
+h+='<div class="spd"><div id="vpnB" onclick="RV()" style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:12px;cursor:pointer;transition:.2s"><i class="ti ti-shield-check" style="font-size:28px;color:var(--accent)"></i><span style="font-size:11px;color:var(--text2)">تست اتصال</span></div><div id="vpnR" style="font-family:monospace;font-size:13px;font-weight:800;color:var(--accent);padding:8px;margin-top:4px">کلیک کنید</div></div>';
 for(var i=0;i<d.links.length;i++){var l=d.links[i];var p=l.limit_bytes>0?Math.min(100,(l.used_bytes/l.limit_bytes)*100):0;var rm=l.limit_bytes>0?Math.max(0,l.limit_bytes-l.used_bytes):-1;var rc=rm<0?'g':(rm<1048576?'r':(rm<1073741824?'y':'g'));h+='<div class="cfg"><div class="h"><span class="nm">'+E(l.label)+'</span><span class="st '+(l.active?'on':'off')+'">'+(l.active?'● فعال':'○ غیرفعال')+'</span></div><div class="u"><span>مصرف: <b>'+l.used_fmt+'</b></span><span>از <b>'+(l.limit_bytes===0?'∞':l.limit_fmt)+'</b></span></div><div class="bar"><div class="f" style="width:'+p+'%"></div></div><span class="rm '+rc+'">'+(rm<0?'∞':B(rm))+'</span><div class="vl" id="v-'+i+'">'+E(l.vless_link||'')+'</div><div class="btns"><button class="y" onclick="SV('+i+')">نمایش</button><button class="y" onclick="CP(L['+i+'].vless_link)">کپی</button><button class="o" onclick="Q(L['+i+'].vless_link)">QR</button></div></div>'}
-h+='<div class="spd"><div class="tp"><div class="tt"><i class="ti ti-bolt"></i> تست</div><button style="padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:rgba(255,215,0,0.06);color:var(--accent);font:inherit;font-size:9.5px;font-weight:700;cursor:pointer" id="sB" onclick="TS()">start</button></div><div class="res" id="sR">-</div></div>';
 document.getElementById('root').innerHTML=h}
 (async function(){var d=await LD();if(d)R(d);else document.getElementById('root').innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--text3)"><i class="ti ti-alert-circle" style="font-size:36px;color:var(--red);display:block;margin-bottom:10px"></i><p>خطا</p></div>'})();
 </script>
