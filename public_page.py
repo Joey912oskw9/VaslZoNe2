@@ -155,7 +155,7 @@ function render(d){
     ).replace("API_URL", api_url)
 
 def get_public_page_html(uuid_key: str) -> str:
-    return get_sub_page_html(api_url=f"/api/public/sub/{uuid_key}")
+    return get_sub_page_html(api_url=f"/api/public/sub/{uuid_key}", title="VaslZone Group")
 
 def get_single_sub_page_html(uuid: str) -> str:
-    return get_sub_page_html(api_url=f"/api/public/sub-single/{uuid}")
+    return get_sub_page_html(api_url=f"/api/public/sub-single/{uuid}", title="VaslZone Config")
