@@ -1845,10 +1845,49 @@ async function loadResellers(){
   const d=await(await fetch('/api/resellers')).json();
   const el=document.getElementById('res-list');
   document.getElementById('res-nb').textContent=(d.resellers||[]).length;
-  if(!d.resellers||!d.resellers.length){el.innerHTML='<div class="empty" style="padding:50px"><i class="ti ti-users"></i><p>هنوز نماینده‌ای نیست</p></div>';return}
-  el.innerHTML='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:var(--accent-d);color:var(--t2)"><th style="padding:12px 15px;text-align:right">نام</th><th style="padding:12px 15px;text-align:center">حجم</th><th style="padding:12px 15px;text-align:center">مصرف</th><th style="padding:12px 15px;text-align:center">باقی</th><th style="padding:12px 15px;text-align:center">وضعیت</th><th style="padding:12px 15px;text-align:center">لینک اختصاصی</th><th style="padding:12px 15px;text-align:left">عملیات</th></tr></thead><tbody>'+
-  d.resellers.map(r=>'<tr style="border-top:1px solid var(--card-b)"><td style="padding:14px 15px;font-weight:700">'+r.name+'</td><td style="padding:14px 15px;text-align:center">'+r.total_fmt+'</td><td style="padding:14px 15px;text-align:center">'+r.allocated_fmt+'</td><td style="padding:14px 15px;text-align:center;color:'+(r.remaining_bytes>0?'var(--green-t)':'var(--red-t)')+'">'+r.remaining_fmt+'</td><td style="padding:14px 15px;text-align:center"><span class="badge '+(r.active?'bg-green':'bg-red')+'"><span class="dot '+(r.active?'dg pulse':'dr')+'"></span> '+(r.active?'فعال':'غیرفعال')+'</span></td><td style="padding:14px 15px;text-align:center"><button class="btn btn-sm btn-g" onclick="navigator.clipboard.writeText(\''+r.login_link+'\').then(()=>toast(\'لینک اختصاصی کپی شد\',\'ok\'))" title="کپی لینک"><i class="ti ti-copy"></i></button> <button class="btn btn-sm btn-amber" onclick="resetResToken(\''+r.id+'\')" title="تغییر لینک"><i class="ti ti-refresh"></i></button></td><td style="padding:14px 15px;text-align:left"><button class="btn btn-sm btn-d" onclick="deleteReseller(\''+r.id+'\')"><i class="ti ti-trash"></i> حذف</button></td></tr>').join('')+
-  '</tbody></table></div>';
+  if(!d.resellers||!d.resellers.length){
+    el.innerHTML='<div class="empty" style="padding:50px"><i class="ti ti-users"></i><p>هنوز نماینده‌ای نیست</p></div>';
+    return;
+  }
+  const rows=d.resellers.map(function(r){
+    const pct=r.total_bytes?Math.round(r.allocated_bytes/r.total_bytes*100):0;
+    const color=pct>90?'var(--red-t)':pct>70?'var(--amber)':'var(--green-t)';
+    const safe=String(r.name).replace(/'/g,"\\'");
+    return '<tr style="border-top:1px solid var(--card-b)">'
+      +'<td style="padding:14px 15px;font-weight:700">'+safe+'</td>'
+      +'<td style="padding:14px 15px;text-align:center">'+r.total_fmt+'</td>'
+      +'<td style="padding:14px 15px;text-align:center;color:var(--orange)">'+r.allocated_fmt+'</td>'
+      +'<td style="padding:14px 15px;text-align:center;color:'+color+'">'+r.remaining_fmt+'</td>'
+      +'<td style="padding:14px 15px;text-align:center">'+r.traffic_fmt+'</td>'
+      +'<td style="padding:14px 15px;text-align:center">'+r.links_count+'</td>'
+      +'<td><span class="badge '+(r.active?'bg-green':'bg-red')+'">'+(r.active?'فعال':'غیرفعال')+'</span></td>'
+      +'<td style="padding:10px;text-align:center;white-space:nowrap">'
+      +'<button class="btn btn-sm btn-amber" onclick="editReseller(\''+r.id+'\')" title="ویرایش"><i class="ti ti-edit"></i></button> '
+      +'<button class="btn btn-sm btn-g" onclick="navigator.clipboard.writeText(\''+r.login_link+'\').then(()=>toast(\'کپی شد\',\'ok\'))" title="کپی لینک"><i class="ti ti-copy"></i></button> '
+      +'<button class="btn btn-sm btn-amber" onclick="resetResToken(\''+r.id+'\')"><i class="ti ti-refresh"></i></button> '
+      +'<button class="btn btn-sm '+(r.active?'btn-d':'btn-g')+'" onclick="toggleReseller(\''+r.id+'\','+r.active+')"><i class="ti ti-'+(r.active?'ban':'check')+'"></i></button> '
+      +'<button class="btn btn-sm btn-d" onclick="deleteReseller(\''+r.id+'\')"><i class="ti ti-trash"></i></button>'
+      +'</td></tr>';
+  }).join('');
+  el.innerHTML='<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:var(--accent-d);color:var(--t2)"><th style="padding:12px">نام</th><th style="padding:12px">کل حجم</th><th style="padding:12px">تخصیص</th><th style="padding:12px">باقی</th><th style="padding:12px">ترافیک</th><th style="padding:12px">کانفیگ</th><th style="padding:12px">وضعیت</th><th style="padding:12px">عملیات</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+}
+async function editReseller(id){
+  const gb=prompt('حجم جدید (GB):');
+  if(!gb||isNaN(gb)||parseFloat(gb)<=0){toast('ورودی نامعتبر','err');return;}
+  const pw=prompt('رمز جدید (خالی=بدون تغییر):')||'';
+  const body={limit_gb:parseFloat(gb)};
+  if(pw.trim())body.password=pw.trim();
+  try{
+    const r=await fetch('/api/resellers/'+id,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(r.ok){toast('ذخیره ✓','ok');loadResellers();}
+    else{const e=await r.json();toast(e.detail||'خطا','err');}
+  }catch(e){toast('خطای شبکه','err');}
+}
+async function toggleReseller(id,cur){
+  try{
+    const r=await fetch('/api/resellers/'+id,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({active:!cur})});
+    if(r.ok){toast('تغییر کرد ✓','ok');loadResellers();}
+  }catch(e){toast('خطا','err');}
 }
 
 async function resetResToken(id){
