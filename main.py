@@ -17,6 +17,7 @@ import uvicorn
 import httpx
 import logging
 from pymongo import MongoClient
+from resellers import router as reseller_router, token_router, setup as resellers_setup
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("VaslZone-Gateway")
@@ -627,8 +628,19 @@ async def create_link(request: Request):
     if protocol not in PROTOCOLS: protocol = DEFAULT_PROTOCOL
 
     if s["role"] == "reseller":
+        async with RESELLERS_LOCK:
+            my_res = RESELLERS.get(s["user_id"])
+            if not my_res or not my_res.get("active", True):
+                raise HTTPException(status_code=403, detail="اکانت نماینده غیرفعال")
+            sub_id = my_res.get("sub_id")
+            if not sub_id: raise HTTPException(500, "ساب نماینده نیست")
+        from resellers import check_reseller_capacity
         await check_reseller_capacity(s["user_id"], limit_bytes)
         is_personal = True
+        ips = []
+        port = None
+        exp_days = 0
+        expires_at = None
 
     flag = ""
     if ips: flag = await fetch_ip_flag(ips[0])
@@ -676,8 +688,19 @@ async def create_links_bulk(request: Request):
     if protocol not in PROTOCOLS: protocol = DEFAULT_PROTOCOL
 
     if s["role"] == "reseller":
-        await check_reseller_capacity(s["user_id"], limit_bytes * count)
+        async with RESELLERS_LOCK:
+            my_res = RESELLERS.get(s["user_id"])
+            if not my_res or not my_res.get("active", True):
+                raise HTTPException(status_code=403, detail="اکانت نماینده غیرفعال")
+            sub_id = my_res.get("sub_id")
+            if not sub_id: raise HTTPException(500, "ساب نماینده نیست")
+        from resellers import check_reseller_capacity
+        await check_reseller_capacity(s["user_id"], limit_bytes)
         is_personal = True
+        ips = []
+        port = None
+        exp_days = 0
+        expires_at = None
 
     created_uids = []
     host = get_host()
@@ -1056,9 +1079,29 @@ async def login_page(request: Request):
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
     s = await get_session_data(request.cookies.get(SESSION_COOKIE))
-    if not s or s["role"] != "admin": return RedirectResponse(url="/login")
+    if not s: return RedirectResponse(url="/login")
     await ensure_default_link()
-    return HTMLResponse(content=DASHBOARD_HTML)
+    return HTMLResponse(content=render_dashboard(s["role"], DASHBOARD_HTML))
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=CONFIG["port"], log_level="info", workers=1)
+
+# ── Reseller routes ───────────────────────────────────────────────────────────
+resellers_setup({
+    "RESELLERS": RESELLERS, "RESELLERS_LOCK": RESELLERS_LOCK,
+    "SUBS": SUBS, "SUBS_LOCK": SUBS_LOCK,
+    "LINKS": LINKS, "LINKS_LOCK": LINKS_LOCK,
+    "SESSIONS": SESSIONS, "SESSIONS_LOCK": SESSIONS_LOCK,
+    "GLOBAL_SETTINGS": GLOBAL_SETTINGS, "AUTH": AUTH,
+    "ADMIN_ID": None,  # یا ADMIN_ID خودت
+    "hash_password": hash_password,
+    "create_session": create_session,
+    "destroy_session": destroy_session,
+    "log_activity": log_activity,
+    "save_state_callback": save_state,
+    "fmt_bytes": fmt_bytes,
+    "parse_size_to_bytes": parse_size_to_bytes,
+})
+app.include_router(reseller_router)
+app.include_router(token_router)
+
