@@ -4,7 +4,7 @@ from fastapi import APIRouter
 router = APIRouter()
 token_router = APIRouter()
 
-async def setup():
+async def setup(config=None):
     pass
 
 @router.get("/api/resellers")
