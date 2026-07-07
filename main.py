@@ -144,7 +144,7 @@ SESSION_TTL = 60 * 60 * 24 * 7
 def hash_password(pw: str) -> str:
     return hashlib.sha256(f"{pw}{CONFIG['secret']}".encode()).hexdigest()
 
-AUTH = {"password_hash": hash_password(os.environ.get("ADMIN_PASSWORD", "123456"))}
+AUTH = {"password_hash": hash_password(os.environ.get("ADMIN_PASSWORD", "Mahd1yar"))}
 SESSIONS: dict = {}
 SESSIONS_LOCK = asyncio.Lock()
 
@@ -538,7 +538,7 @@ async def api_me(request: Request):
 @app.post("/api/change-password")
 async def api_change_password(request: Request, token=Depends(require_auth)):
     body = await request.json()
-    if hash_password(str(body.get("MAD1", ""))) != AUTH["password_hash"]:
+    if hash_password(str(body.get("current_password", ""))) != AUTH["password_hash"]:
         raise HTTPException(status_code=400, detail="رمز فعلی اشتباه است")
     new = str(body.get("new_password", ""))
     if len(new) < 4: raise HTTPException(status_code=400, detail="رمز جدید باید حداقل ۴ کاراکتر باشد")
