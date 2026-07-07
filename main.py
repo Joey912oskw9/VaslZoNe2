@@ -1087,28 +1087,36 @@ def render_dashboard(role: str, html: str) -> str:
     users_count = len(LINKS)
     active_count = sum(1 for l in LINKS.values() if l.get("active", True))
     total_traffic = sum(l.get("used_bytes", 0) for l in LINKS.values())
+    total_fmt = fmt_bytes(total_traffic)
     
-    return html.replace("{{role}}", role)
+    return html.replace("{{total_users}}", str(users_count)) \
+               .replace("{{active_users}}", str(active_count)) \
+               .replace("{{total_traffic}}", total_fmt) \
+               .replace("{{role}}", role)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=CONFIG["port"], log_level="info", workers=1)
 
 # ── Reseller routes ───────────────────────────────────────────────────────────
-resellers_setup({
-    "RESELLERS": RESELLERS, "RESELLERS_LOCK": RESELLERS_LOCK,
-    "SUBS": SUBS, "SUBS_LOCK": SUBS_LOCK,
-    "LINKS": LINKS, "LINKS_LOCK": LINKS_LOCK,
-    "SESSIONS": SESSIONS, "SESSIONS_LOCK": SESSIONS_LOCK,
-    "GLOBAL_SETTINGS": GLOBAL_SETTINGS, "AUTH": AUTH,
-    "ADMIN_ID": None,  # یا ADMIN_ID خودت
-    "hash_password": hash_password,
-    "create_session": create_session,
-    "destroy_session": destroy_session,
-    "log_activity": log_activity,
-    "save_state_callback": save_state,
-    "fmt_bytes": fmt_bytes,
-    "parse_size_to_bytes": parse_size_to_bytes,
-})
-app.include_router(reseller_router)
-app.include_router(token_router)
+async def setup_resellers():
+    await resellers_setup({
+        "RESELLERS": RESELLERS, "RESELLERS_LOCK": RESELLERS_LOCK,
+        "SUBS": SUBS, "SUBS_LOCK": SUBS_LOCK,
+        "LINKS": LINKS, "LINKS_LOCK": LINKS_LOCK,
+        "SESSIONS": SESSIONS, "SESSIONS_LOCK": SESSIONS_LOCK,
+        "GLOBAL_SETTINGS": GLOBAL_SETTINGS, "AUTH": AUTH,
+        "ADMIN_ID": None,
+        "hash_password": hash_password,
+        "create_session": create_session,
+        "destroy_session": destroy_session,
+        "log_activity": log_activity,
+        "save_state_callback": save_state,
+        "fmt_bytes": fmt_bytes,
+        "parse_size_to_bytes": parse_size_to_bytes,
+    })
+    app.include_router(reseller_router)
+    app.include_router(token_router)
 
+import asyncio
+loop = asyncio.new_event_loop()
+loop.run_until_complete(setup_resellers())
