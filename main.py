@@ -499,6 +499,7 @@ async def assign_link_to_sub(sub_id: str, request: Request, _=Depends(require_au
 @app.post("/api/login")
 async def api_login(request: Request):
     body = await request.json()
+    ip = client_ip(request)
     pw = str(body.get("password", ""))
     # خط دیباگ:
     import logging
