@@ -1082,6 +1082,13 @@ async def dashboard(request: Request):
     if not s: return RedirectResponse(url="/login")
     await ensure_default_link()
     return HTMLResponse(content=render_dashboard(s["role"], DASHBOARD_HTML))
+    
+def render_dashboard(role: str, html: str) -> str:
+    users_count = len(LINKS)
+    active_count = sum(1 for l in LINKS.values() if l.get("active", True))
+    total_traffic = sum(l.get("used_bytes", 0) for l in LINKS.values())
+    
+    return html.replace("{{role}}", role)
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=CONFIG["port"], log_level="info", workers=1)
